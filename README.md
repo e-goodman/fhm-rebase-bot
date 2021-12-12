@@ -5,12 +5,12 @@ Fantohm Rebase Timer Bot
 
 2)Edit config.json, file should contain {"token": "YOUR DISCORD BOT API TOKEN HERE"}
 
-Bot can be started by running run/start.sh 
+Bot can be started by running src/start.sh 
 
-Logs are in run/fhm-rebase-bot.log 
+Logs are in src/fhm-rebase-bot.log 
 
-You can watch the logs by running run/watch.sh 
-You can kill the bot by running run/kill.sh
+You can watch the logs by running src/watch.sh 
+You can kill the bot by running src/kill.sh
 
 You can set a number of variables in src/resources/constants.json
 
