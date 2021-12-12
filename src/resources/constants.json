@@ -1,5 +1,11 @@
 {
     "FTM_RPC_URL": "https://rpc.ftm.tools",
-    "POLL_RATE_MINS": 1,
-    "DECIMALS_NINE": 9
+    "POLL_RATE_MINS": 2,
+    "DECIMALS_NINE": 9,
+    "DASHBOARD_REFRESH_RATE_MINS": 5,
+    "FHM_STATS_DASHBOARD_URL": "https://app.fantohm.com/#/dashboard",
+    "FHM_STAKING_URL": "https://app.fantohm.com/#/stake",
+    "FHM_STAKING_GUIDE_URL": "https://fantohm.gitbook.io/documentation/staking",
+    "FHM_BONDING_GUIDE_URL": "https://fantohm.gitbook.io/documentation/bonding",
+    "CHART_URL": "https://kek.tools/t/fhm?pair=0x46622913ce40c54ec14857f72968d4baaf963947"
 }
