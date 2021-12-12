@@ -2,4 +2,6 @@ node_modules/
 node/*
 npm/cache/*
 yarn.lock
-/src/data/statsMsgId
+/src/statsMsgId
+/run/fhm-rebase-bot.log
+/run/fhm-rebase-bot.pid

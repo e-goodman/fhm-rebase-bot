@@ -14,7 +14,7 @@ let guildMember = null;
 let clientReady = false;
 let clientBusy = false;
 
-const STATS_MSG_ID_FILE_PATH = './data/statsMsgId';
+const STATS_MSG_ID_FILE_PATH = './statsMsgId';
 
 let statsMsgId;
 
