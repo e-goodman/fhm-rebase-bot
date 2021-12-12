@@ -154,7 +154,7 @@ const init = async () => {
     client.once('ready', async () => {
 
         guildMember = await client.guilds.cache.first().me;
-        statsChannel = client.channels.cache.find(channel => channel.name === "stats-feed");
+        statsChannel = client.channels.cache.find(channel => channel.name === CONSTANTS.DASH_CHANNEL_NAME);
         console.debug("statsChannel:", statsChannel);
 
         clientReady = true;

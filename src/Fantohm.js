@@ -10,10 +10,6 @@ const getProtocolMetricsFromWebUI = async () => {
 
         });
 
-    //await delay(3);
-
-    await page.screenshot({ path: "res.png" });
-
     const dashboardMetrics = await page.evaluate(() => {
         return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
     });

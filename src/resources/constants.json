@@ -7,5 +7,6 @@
     "FHM_STAKING_URL": "https://app.fantohm.com/#/stake",
     "FHM_STAKING_GUIDE_URL": "https://fantohm.gitbook.io/documentation/staking",
     "FHM_BONDING_GUIDE_URL": "https://fantohm.gitbook.io/documentation/bonding",
-    "CHART_URL": "https://kek.tools/t/fhm?pair=0x46622913ce40c54ec14857f72968d4baaf963947"
+    "CHART_URL": "https://kek.tools/t/fhm?pair=0x46622913ce40c54ec14857f72968d4baaf963947",
+    "DASH_CHANNEL_NAME": "stats-feed"
 }
