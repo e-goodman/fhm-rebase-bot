@@ -121,7 +121,7 @@ const updateStatsFeedChannel = async () => {
             const statsEmbed = new MessageEmbed()
                 .setColor('#0099ff')
                 .setURL('https://discord.js.org/')
-                .setAuthor('Fantohm Dashboard (' + ghostEmoji + ',' + ghostEmoji + ')', 'https://www.fantohm.com/logo.png', 'https://discord.js.org')
+                .setAuthor('Fantohm Dashboard (' + ghostEmoji + ',' + ghostEmoji + ')', 'https://www.fantohm.com/logo.png', 'https://www.fantohm.com/')
                 .setDescription('This data is updated every ' + CONSTANTS.DASHBOARD_REFRESH_RATE_MINS + " mins!")
                 .setThumbnail('https://www.fantohm.com/logo.png')
                 .addFields(
