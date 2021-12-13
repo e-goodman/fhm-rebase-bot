@@ -83,6 +83,7 @@ const updatePriceBotDisplay = async () => {
         console.error(new Date() + " " + error);
         priceBotDisplayErrCount++;
         if (priceBotDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
+            await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
             setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
             console.debug("priceBotDisplayErrCount:" + priceBotDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
         }
@@ -169,6 +170,8 @@ const updateStatsFeedChannel = async () => {
         console.debug(new Date() + " " + error);
         statsFeedDisplayErrCount++;
         if (statsFeedDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
+            await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
+            ERROR_WAIT_MINS
             setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
             console.debug("statsFeedDisplayErrCount:" + statsFeedDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
         }
