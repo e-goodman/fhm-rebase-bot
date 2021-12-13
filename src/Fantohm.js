@@ -1,19 +1,9 @@
 const puppeteer = require('puppeteer');
 const CONSTANTS = require('./resources/constants.json');
 
-const getProtocolMetricsFromWebUI = async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
-        {
-            waitUntil: 'networkidle0',
+let launchMethod = 1;
 
-        });
-
-    const dashboardMetrics = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
-    });
-
+const processDashboardMetrics = (dashboardMetrics) => {
     const metrics = {};
 
     dashboardMetrics.forEach(x => {
@@ -43,22 +33,94 @@ const getProtocolMetricsFromWebUI = async () => {
         }
     });
 
+    return metrics;
+}
+
+
+const getProtocolMetricsFromWebUI = async () => {
+    let browser;
+
+    if (launchMethod === 1) {
+        try {
+            browser = await puppeteer.launch();
+        }
+        catch
+        {
+            console.error(new Date() + " " + error);
+            launchMethod = 2;
+        }
+    }
+
+    if (launchMethod === 2) {
+        browser = await puppeteer.launch({ executablePath: 'chromium-browser' });
+    }
+
+    const page = await browser.newPage();
+    await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
+        {
+            waitUntil: 'networkidle0',
+
+        });
+
+    let dashboardMetrics = await page.evaluate(() => {
+        return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
+    });
+
+    const metrics = {};
+
+    metrics.ftm = processDashboardMetrics(dashboardMetrics);
+
     await page.goto(CONSTANTS.FHM_STAKING_URL,
         {
             waitUntil: 'networkidle0',
 
         });
 
-    const stakingMetrics = await page.evaluate(() => {
+    let stakingMetrics = await page.evaluate(() => {
         return Array.from(document.querySelectorAll("div.rebase-timer")).map(x => x.textContent)
     });
 
-    metrics.rebaseEta = stakingMetrics[0].replace(" to next rebase", "");
+    metrics.ftm.rebaseEta = stakingMetrics[0].replace(" to next rebase", "");
+
+    //Moonriver stats
+    await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
+        {
+            waitUntil: 'networkidle0',
+
+        });
+
+    await page.evaluate(() => {
+        localStorage.setItem('defaultNetworkId', '1285');
+    });
+
+    await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
+        {
+            waitUntil: 'networkidle0',
+        });
+
+    dashboardMetrics = await page.evaluate(() => {
+        return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
+    });
+
+    metrics.moon = processDashboardMetrics(dashboardMetrics);
+
+
+    await page.goto(CONSTANTS.FHM_STAKING_URL,
+        {
+            waitUntil: 'networkidle0',
+
+        });
+
+    stakingMetrics = await page.evaluate(() => {
+        return Array.from(document.querySelectorAll("div.rebase-timer")).map(x => x.textContent)
+    });
+
+    metrics.moon.rebaseEta = stakingMetrics[0].replace(" to next rebase", "");
 
     await browser.close();
     return metrics;
 };
 
-getProtocolMetricsFromWebUI();
+
 
 module.exports = { getProtocolMetricsFromWebUI };
