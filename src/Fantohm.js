@@ -44,8 +44,7 @@ const getProtocolMetricsFromWebUI = async () => {
         try {
             browser = await puppeteer.launch();
         }
-        catch
-        {
+        catch (error) {
             console.error(new Date() + " " + error);
             launchMethod = 2;
         }
