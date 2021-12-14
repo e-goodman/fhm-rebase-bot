@@ -71,9 +71,9 @@ const updatePriceBotDisplay = async () => {
             if (oldRebaseEta !== fantomMetrics.rebaseEta) {
                 oldRebaseEta = fantomMetrics.rebaseEta;
 
-                const res = await client.user.setActivity('Rebase ' + fantomMetrics.rebaseEta, { type: 'WATCHING' });
+                await client.user.setActivity('Rebase ' + fantomMetrics.rebaseEta, { type: 'WATCHING' });
 
-                console.debug("\n " + new Date() + " rebase eta update sent!, res:", res + "\n");
+                console.debug("\n " + new Date() + " rebase eta update sent! \n");
             }
 
             if (oldPrice !== fantomMetrics.price) {
