@@ -4,7 +4,16 @@ const CONSTANTS = require('./resources/constants.json');
 let launchMethod = 1;
 
 const processDashboardMetrics = (dashboardMetrics) => {
-    const metrics = {};
+    const metrics = {
+        price: '',
+        apy: '',
+        marketCap: '',
+        totalCircSupply: '',
+        tvl: '',
+        fiveDayRate: '',
+        stakedFHM: '',
+        globalMarketcap: ''
+    };
 
     dashboardMetrics.forEach(x => {
         if (!metrics.price && x.startsWith("Market Price")) {

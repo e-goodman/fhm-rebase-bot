@@ -51,28 +51,36 @@ let oldPrice = null;
 let updatingPriceBotDisplay = false;
 
 let priceBotDisplayErrCount = 0;
+
+const checkValues = (obj) => {
+    Object.keys(obj).forEach((k) => {
+        obj[k] = obj[k] ? obj[k] : 'N/A';
+    });
+    return obj;
+};
+
 const updatePriceBotDisplay = async () => {
     try {
         console.debug("\n" + new Date() + " updatePriceBotDisplay **************")
 
         if (clientReady && !updatingPriceBotDisplay) {
-            const fantomMetrics = (await Fantohm.getProtocolMetricsFromWebUI()).ftm;
+            const fantomMetrics = checkValues((await Fantohm.getProtocolMetricsFromWebUI()).ftm);
 
             updatingPriceBotDisplay = true;
 
             if (oldRebaseEta !== fantomMetrics.rebaseEta) {
                 oldRebaseEta = fantomMetrics.rebaseEta;
 
-                const res = client.user.setActivity('Rebase ' + fantomMetrics.rebaseEta, { type: 'WATCHING' });
+                const res = await client.user.setActivity('Rebase ' + fantomMetrics.rebaseEta, { type: 'WATCHING' });
 
-                console.debug(new Date() + " update sent!, res:", res);
+                console.debug("\n " + new Date() + " rebase eta update sent!, res:", res + "\n");
             }
 
             if (oldPrice !== fantomMetrics.price) {
                 oldPrice = fantomMetrics.price;
 
                 const res = await guildMember.setNickname(fantomMetrics.price + ghostEmoji + " FHM");
-                console.debug(new Date() + " update sent!, res:", res);
+                console.debug("\n" + new Date() + " price update sent!, res:", res + "\n");
             }
 
         }
@@ -113,10 +121,14 @@ const updateStatsFeedChannel = async () => {
         if (clientReady && !updatingStatsFeed) {
             updatingStatsFeed = true;
             const metrics = await Fantohm.getProtocolMetricsFromWebUI();
-            const fantomMetrics = metrics.ftm;
-            const moonRiverMetrics = metrics.moon;
+
+            const fantomMetrics = checkValues(metrics.ftm);
+            const moonRiverMetrics = checkValues(metrics.moon);
+
 
             console.debug(new Date() + " fantomMetrics: ", fantomMetrics);
+            console.debug(new Date() + " moonRiverMetrics: ", moonRiverMetrics);
+
 
             const statsEmbed = new MessageEmbed()
                 .setColor('#0099ff')
@@ -172,7 +184,7 @@ const updateStatsFeedChannel = async () => {
         if (statsFeedDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
             await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
             setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
-            console.debug("statsFeedDisplayErrCount:" + statsFeedDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
+            console.debug("\n statsFeedDisplayErrCount:" + statsFeedDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
         }
     }
     finally {
@@ -188,7 +200,7 @@ const init = async () => {
 
         guildMember = await client.guilds.cache.first().me;
         statsChannel = client.channels.cache.find(channel => channel.name === CONSTANTS.DASH_CHANNEL_NAME);
-        console.debug(new Date() + " statsChannel:", statsChannel);
+        console.debug("\n" + new Date() + " statsChannel:", statsChannel + "\n");
 
         clientReady = true;
 
