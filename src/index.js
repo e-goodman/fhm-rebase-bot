@@ -1,5 +1,6 @@
 const { Client, Intents, MessageEmbed, CommandInteractionOptionResolver } = require('discord.js');
 const fs = require('fs');
+const _ = require('lodash');
 
 const { token } = require('./config.json');
 
@@ -17,7 +18,6 @@ const STATS_MSG_ID_FILE_PATH = './statsMsgId';
 
 let statsMsgId;
 
-client.login(token);
 
 
 const getStatsMsgID = () => {
@@ -51,10 +51,13 @@ let oldPrice = null;
 let updatingPriceBotDisplay = false;
 
 let priceBotDisplayErrCount = 0;
+let oldFtmMetrics;
+let oldMoonMetrics;
 
-const checkValues = (obj) => {
+
+const checkValues = (obj, oldMetrics) => {
     Object.keys(obj).forEach((k) => {
-        obj[k] = obj[k] ? obj[k] : 'N/A';
+        obj[k] = obj[k] ? obj[k] : (oldMetrics[k] ? oldMetrics[k] : 'N/A');
     });
     return obj;
 };
@@ -64,7 +67,17 @@ const updatePriceBotDisplay = async () => {
         console.debug("\n" + new Date() + " updatePriceBotDisplay **************")
 
         if (clientReady && !updatingPriceBotDisplay) {
-            const fantomMetrics = checkValues((await Fantohm.getProtocolMetricsFromWebUI()).ftm);
+            let metrics;
+            try {
+                metrics = await Fantohm.getProtocolMetricsFromWebUI();
+            }
+            catch (error) {
+                console.error("Error fetching metrics from web UI ", error);
+                return;
+            }
+
+            const fantomMetrics = checkValues(metrics.ftm, oldFtmMetrics);
+            oldFtmMetrics = _.cloneDeep(metrics.ftm);
 
             updatingPriceBotDisplay = true;
 
@@ -79,8 +92,7 @@ const updatePriceBotDisplay = async () => {
             if (oldPrice !== fantomMetrics.price) {
                 oldPrice = fantomMetrics.price;
 
-                const res = await guildMember.setNickname(fantomMetrics.price + ghostEmoji + " FHM");
-                console.debug("\n" + new Date() + " price update sent!, res:", res + "\n");
+                return await guildMember.setNickname(fantomMetrics.price + ghostEmoji + " FHM");
             }
 
         }
@@ -120,15 +132,21 @@ const updateStatsFeedChannel = async () => {
 
         if (clientReady && !updatingStatsFeed) {
             updatingStatsFeed = true;
-            const metrics = await Fantohm.getProtocolMetricsFromWebUI();
+            let metrics;
 
-            const fantomMetrics = checkValues(metrics.ftm);
-            const moonRiverMetrics = checkValues(metrics.moon);
+            try {
+                metrics = await Fantohm.getProtocolMetricsFromWebUI();
+            }
+            catch (error) {
+                console.error("Error fetching metrics from web UI ", error);
+                return;
+            }
 
+            const fantomMetrics = checkValues(metrics.ftm, oldFtmMetrics);
+            const moonRiverMetrics = checkValues(metrics.moon, oldMoonMetrics);
 
-            console.debug(new Date() + " fantomMetrics: ", fantomMetrics);
-            console.debug(new Date() + " moonRiverMetrics: ", moonRiverMetrics);
-
+            oldFtmMetrics = _.cloneDeep(metrics.ftm);
+            oldMoonMetrics = _.cloneDeep(metrics.moon);
 
             const statsEmbed = new MessageEmbed()
                 .setColor('#0099ff')
@@ -166,8 +184,6 @@ const updateStatsFeedChannel = async () => {
 
             if (statsMsgId) {
                 const statsEmbedMsg = await statsChannel.messages.fetch(statsMsgId);
-                console.debug(new Date() + " statsEmbedMsg:", statsEmbedMsg);
-
                 await statsEmbedMsg.edit({ embeds: [statsEmbed] })
             }
             else {
@@ -192,7 +208,10 @@ const updateStatsFeedChannel = async () => {
     }
 }
 
+client.login(token);
+
 const init = async () => {
+
     statsMsgId = getStatsMsgID();
 
     console.debug(new Date() + " statsMsgId:", statsMsgId);
@@ -213,3 +232,5 @@ const init = async () => {
 }
 
 init();
+
+

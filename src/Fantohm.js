@@ -67,7 +67,7 @@ const getProtocolMetricsFromWebUI = async () => {
     await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
         {
             waitUntil: 'networkidle0',
-
+            timeout: CONSTANTS.SCRAPER_PAGE_LOAD_TIMEOUT_MINS * 60 * 1000
         });
 
     let dashboardMetrics = await page.evaluate(() => {
@@ -81,7 +81,7 @@ const getProtocolMetricsFromWebUI = async () => {
     await page.goto(CONSTANTS.FHM_STAKING_URL,
         {
             waitUntil: 'networkidle0',
-
+            timeout: CONSTANTS.SCRAPER_PAGE_LOAD_TIMEOUT_MINS * 60 * 1000
         });
 
     let stakingMetrics = await page.evaluate(() => {
@@ -94,7 +94,7 @@ const getProtocolMetricsFromWebUI = async () => {
     await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
         {
             waitUntil: 'networkidle0',
-
+            timeout: CONSTANTS.SCRAPER_PAGE_LOAD_TIMEOUT_MINS * 60 * 1000
         });
 
     await page.evaluate(() => {
@@ -104,6 +104,7 @@ const getProtocolMetricsFromWebUI = async () => {
     await page.goto(CONSTANTS.FHM_STATS_DASHBOARD_URL,
         {
             waitUntil: 'networkidle0',
+            timeout: CONSTANTS.SCRAPER_PAGE_LOAD_TIMEOUT_MINS * 60 * 1000
         });
 
     dashboardMetrics = await page.evaluate(() => {
@@ -116,6 +117,7 @@ const getProtocolMetricsFromWebUI = async () => {
     await page.goto(CONSTANTS.FHM_STAKING_URL,
         {
             waitUntil: 'networkidle0',
+            timeout: CONSTANTS.SCRAPER_PAGE_LOAD_TIMEOUT_MINS * 60 * 1000
 
         });
 

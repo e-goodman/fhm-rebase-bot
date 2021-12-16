@@ -10,5 +10,6 @@
     "CHART_URL": "https://kek.tools/t/fhm?pair=0x46622913ce40c54ec14857f72968d4baaf963947",
     "DASH_CHANNEL_NAME": "stats-feed",
     "MAX_RETRY_COUNT": 10,
-    "ERROR_WAIT_MINS": 5
+    "ERROR_WAIT_MINS": 5,
+    "SCRAPER_PAGE_LOAD_TIMEOUT_MINS": 2
 }
