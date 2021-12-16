@@ -71,7 +71,7 @@ const getProtocolMetricsFromWebUI = async () => {
         });
 
     let dashboardMetrics = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
+        return Array.from(document.querySelectorAll("div.MuiBox-root")).map(x => x.textContent)
     });
 
     const metrics = {};
@@ -107,7 +107,7 @@ const getProtocolMetricsFromWebUI = async () => {
         });
 
     dashboardMetrics = await page.evaluate(() => {
-        return Array.from(document.querySelectorAll("div.metric")).map(x => x.textContent)
+        return Array.from(document.querySelectorAll("div.MuiBox-root")).map(x => x.textContent)
     });
 
     metrics.moon = processDashboardMetrics(dashboardMetrics);
