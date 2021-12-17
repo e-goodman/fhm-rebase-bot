@@ -73,6 +73,8 @@ const updatePriceBotDisplay = async () => {
             }
             catch (error) {
                 console.error("Error fetching metrics from web UI ", error);
+                await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
+                updatePriceBotDisplay();
                 return;
             }
 
@@ -104,8 +106,8 @@ const updatePriceBotDisplay = async () => {
         priceBotDisplayErrCount++;
         if (priceBotDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
             await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
-            setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
             console.debug("priceBotDisplayErrCount:" + priceBotDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
+            updatePriceBotDisplay();
         }
     }
     finally {
@@ -139,6 +141,8 @@ const updateStatsFeedChannel = async () => {
             }
             catch (error) {
                 console.error("Error fetching metrics from web UI ", error);
+                await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
+                updateStatsFeedChannel();
                 return;
             }
 
@@ -199,8 +203,8 @@ const updateStatsFeedChannel = async () => {
         statsFeedDisplayErrCount++;
         if (statsFeedDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
             await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
-            setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
             console.debug("\n statsFeedDisplayErrCount:" + statsFeedDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
+            setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
         }
     }
     finally {
