@@ -88,13 +88,13 @@ const updatePriceBotDisplay = async () => {
 
                 await client.user.setActivity('Rebase ' + fantomMetrics.rebaseEta, { type: 'WATCHING' });
 
-                console.debug("\n " + new Date() + " rebase eta update sent! \n");
+                console.debug("\n" + new Date() + " rebase eta update sent!");
             }
 
             if (oldPrice !== fantomMetrics.price) {
                 oldPrice = fantomMetrics.price;
 
-                return await guildMember.setNickname(fantomMetrics.price + ghostEmoji + " FHM");
+                await guildMember.setNickname(fantomMetrics.price + ghostEmoji + " FHM");
             }
 
         }
@@ -202,8 +202,8 @@ const updateStatsFeedChannel = async () => {
         console.debug(new Date() + " " + error);
         statsFeedDisplayErrCount++;
         if (statsFeedDisplayErrCount < CONSTANTS.MAX_RETRY_COUNT + 1) {
-            await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
             console.debug("\n statsFeedDisplayErrCount:" + statsFeedDisplayErrCount + " max:" + CONSTANTS.MAX_RETRY_COUNT);
+            await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
             setTimeout(updatePriceBotDisplay, prieDisplayUpdateInterval);
         }
     }
