@@ -74,6 +74,7 @@ const updatePriceBotDisplay = async () => {
             catch (error) {
                 console.error("Error fetching metrics from web UI ", error);
                 await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
+                updatingPriceBotDisplay = false;
                 updatePriceBotDisplay();
                 return;
             }
@@ -142,6 +143,7 @@ const updateStatsFeedChannel = async () => {
             catch (error) {
                 console.error("Error fetching metrics from web UI ", error);
                 await new Promise((resolve) => setTimeout(resolve, CONSTANTS.ERROR_WAIT_MINS * 60 * 1000));
+                updatingStatsFeed = false;
                 updateStatsFeedChannel();
                 return;
             }
